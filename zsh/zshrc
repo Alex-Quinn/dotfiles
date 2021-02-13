@@ -1,0 +1,149 @@
+# Oh-my-zsh config
+autoload -Uz compinit
+autoload -U promptinit; promptinit
+if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
+  compinit
+else
+  compinit -C
+fi
+
+source <(antibody init)
+
+antibody bundle robbyrussell/oh-my-zsh path:plugins/git
+antibody bundle robbyrussell/oh-my-zsh path:plugins/bundler
+antibody bundle robbyrussell/oh-my-zsh path:plugins/ruby
+antibody bundle robbyrussell/oh-my-zsh path:plugins/vi-mode
+
+spaceship_minimal_git_branch() {
+  [[ $SPACESHIP_GIT_BRANCH_SHOW == false ]] && return
+
+  local git_current_branch="$vcs_info_msg_0_"
+  [[ -z "$git_current_branch" ]] && return
+
+  git_current_branch="${git_current_branch#heads/}"
+  git_current_branch="${git_current_branch/.../}"
+  minimal_branch=`echo ${git_current_branch} | rev | cut -d / -f 1 | rev`
+
+  spaceship::section \
+    "$SPACESHIP_GIT_BRANCH_COLOR" \
+    "$SPACESHIP_GIT_BRANCH_PREFIX${minimal_branch}$SPACESHIP_GIT_BRANCH_SUFFIX"
+}
+
+spaceship_ticket() {
+  local git_current_branch="$vcs_info_msg_0_"
+  [[ -z "$git_current_branch" ]] && return
+
+  git_current_branch="${git_current_branch#heads/}"
+  git_current_branch="${git_current_branch/.../}"
+
+  ticket=`echo ${git_current_branch} | cut -d / -f 2`
+  [[ ${(L)ticket} =~ ${(L)SPACESHIP_TICKET_MATCH} ]] || return
+
+  spaceship::section \
+    "$SPACESHIP_TICKET_COLOR" \
+    "$SPACESHIP_TICKET_PREFIX${(L)ticket}$SPACESHIP_TICKET_SUFFIX"
+}
+
+SPACESHIP_PROMPT_SEPARATE_LINE=false
+SPACESHIP_PROMPT_ADD_NEWLINE=false
+SPACESHIP_PROMPT_ORDER=(
+  battery
+  dir
+  minimal_git_branch
+  ticket
+  git_status
+  vi_mode
+)
+
+# Battery
+SPACESHIP_BATTERY_SHOW=true
+SPACESHIP_BATTERY_THRESHOLD=20
+SPACESHIP_BATTERY_PREFIX=""
+SPACESHIP_BATTERY_SUFFIX=" "
+SPACESHIP_BATTERY_SYMBOL_FULL=""
+SPACESHIP_BATTERY_SYMBOL_DISCHARGING=""
+SPACESHIP_BATTERY_SYMBOL_CHARGING="ϟ"
+# Directory
+SPACESHIP_DIR_PREFIX=""
+SPACESHIP_DIR_SUFFIX=" "
+SPACESHIP_DIR_COLOR="#6c6c6c"
+SPACESHIP_DIR_LOCK_SYMBOL=""
+# Ticket
+SPACESHIP_TICKET_MATCH="ch[0-9]+"
+SPACESHIP_TICKET_PREFIX="("
+SPACESHIP_TICKET_SUFFIX=") "
+SPACESHIP_TICKET_COLOR="#6c6c6c"
+# Git branch
+SPACESHIP_GIT_BRANCH_PREFIX=""
+SPACESHIP_GIT_BRANCH_SUFFIX=" "
+SPACESHIP_GIT_BRANCH_COLOR="#d70087"
+# Git status
+SPACESHIP_GIT_STATUS_PREFIX=""
+SPACESHIP_GIT_STATUS_SUFFIX=" "
+SPACESHIP_GIT_STATUS_MODIFIED="!"
+SPACESHIP_GIT_STATUS_COLOR="#afafd7"
+# Char / Vi-mode
+SPACESHIP_VI_MODE_NORMAL="❮"
+SPACESHIP_VI_MODE_INSERT="❯"
+SPACESHIP_VI_MODE_COLOR="#00d700"
+SPACESHIP_CHAR_SYMBOL=""
+
+prompt spaceship
+
+bindkey -v
+
+# User config
+eval "$(command rbenv init -)"
+
+alias be='bundle exec'
+alias tc="git diff --name-status master... | egrep -v 'fixtures/|factories' | grep spec | cut -d$'\t' -f 2 | xargs bundle exec rspec"
+alias ex="exit"
+alias server="env PORT=3000 bundle exec puma -C config/puma.rb"
+alias reload="source ~/.zshrc && clear"
+alias diff="colordiff"
+
+function search () {
+  alias | grep $1
+}
+alias als="search"
+
+# Development
+alias jslint="yarn standard && yarn lint-ts"
+alias tlogs='tail -fn 1000 log/test.log'
+alias logs='tail -fn 1000 log/development.log'
+alias yundle="yarn --check-files && bundle"
+alias migrate="bin/rails db:migrate RAILS_ENV=development"
+alias tmigrate="bin/rails db:migrate RAILS_ENV=test"
+alias reqs="tail -Fn 1000 log/development.log | grep --line-buffered 'Started' | grep -vE '(assets|cable)'"
+alias treqs="tail -Fn 1000 log/test.log | grep --line-buffered 'Started' | grep -vE '(assets|cable)'"
+alias dbdo='bin/rails db:environment:set RAILS_ENV=development && be rake db:drop && be rake db:create && be rake db:migrate && be rake db:test:prepare'
+alias start='be foreman start -f Procfile.dev'
+
+# Workbook
+alias book="workbook --quiet"
+alias obook="workbook --edit --search"
+alias cdbook="cd $WORKBOOK_DIR"
+
+# Git
+alias g="git"
+alias gmm='gmom' # git merge origin/master
+alias gs='gst' # git status
+alias gcoa='git co .'
+
+# Processes
+function pss () {
+  ps xao pid,comm | grep $1
+}
+alias process="ps aux | grep -v 'grep' | grep"
+
+# Tmux
+function tstart () {
+  if tmux list-sessions | grep -q main_session; then
+    tmux attach -t main_session
+  else
+    tmux new -s main_session
+  fi
+}
+
+# Source all various non-public zsh config files
+source "${HOME}/.zsh.local"

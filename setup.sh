@@ -4,7 +4,7 @@ set -euo pipefail
 
 dotfiles_dir=$(cd "$(dirname "$0")"; pwd)
 
-#### Vim ####
+#### vim ####
 
 rm -rf "${HOME}/.vim"
 rm -f "${HOME}/.vimrc"
@@ -20,10 +20,15 @@ curl -sfLo "${HOME}/.vim/autoload/plug.vim" --create-dirs "https://raw.githubuse
 
 vim +PlugInstall +PlugClean! +qall
 
-#### TMUX ####
+#### tmux ####
 
 rm -f "${HOME}/.tmux.conf"
-rm -f "${HOME}/.tmate.conf"
-
 ln -s "${dotfiles_dir}/tmux/tmux.conf" "${HOME}/.tmux.conf"
+
+rm -f "${HOME}/.tmate.conf"
 ln -s "${dotfiles_dir}/tmux/tmate.conf" "${HOME}/.tmate.conf"
+
+#### zsh ####
+
+rm -f "${HOME}/.zshrc"
+ln -s "${dotfiles_dir}/zsh/zshrc" "${HOME}/.zshrc"
