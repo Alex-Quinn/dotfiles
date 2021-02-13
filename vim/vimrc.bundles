@@ -2,16 +2,19 @@ if &compatible
   set nocompatible
 end
 
+call plug#begin()
+
 Plug 'benmills/vimux'
 Plug 'henrik/vim-indexed-search'
 Plug 'janko-m/vim-test'
 Plug 'jgdavey/vim-turbux'
 Plug 'jlanzarotta/bufexplorer'
-Plug 'junegunn/fzf', { 'tag': '0.16.7', 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim', {'commit': '741d7caabf229ec183364413f8b6d077a9939838'}
-Plug 'nelstrom/vim-textobj-rubyblock'
-Plug 'pangloss/vim-javascript'
 Plug 'kchmck/vim-coffee-script'
+Plug 'leafgarland/typescript-vim'
+Plug 'pangloss/vim-javascript'
+Plug 'peitalin/vim-jsx-typescript'
 Plug 'scrooloose/nerdtree'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
@@ -20,11 +23,9 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'tweekmonster/wstrip.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-scripts/matchit.zip'
-Plug 'tweekmonster/wstrip.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
 Plug 'w0rp/ale'
 
 if filereadable(expand("~/.vimrc.bundles.local"))

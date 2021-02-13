@@ -40,6 +40,8 @@ set colorcolumn=80
 
 colorscheme vibrantink
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
+" don't highlight trailing whitespace
+let g:wstrip_highlight = 0
 
 " ========= File Types ========
 
@@ -116,10 +118,9 @@ let g:rbpt_colorpairs = [
 let g:sexp_enable_insert_mode_mappings = 0
 
 let $FZF_DEFAULT_COMMAND = 'find . -name "*" -type f 2>/dev/null
-                            \ | grep -v -E "tmp\/|.gitmodules|.git\/|node_modules\/|vendor\/"
-                            \ | sed "s|^\./||"'
+                           \ | grep -v -E "tmp\/|.gitmodules|.git\/|node_modules\/|vendor\/|db\/"
+                           \ | sed "s|^\./||"'
 let $FZF_DEFAULT_OPTS = '--reverse'
-let g:fzf_tags_command = 'ctags -R --exclude=".git\|.svn\|log\|tmp\|db\|pkg" --extra=+f --langmap=Lisp:+.clj'
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
