@@ -123,6 +123,10 @@ alias start='be foreman start -f Procfile.dev'
 alias book="workbook --quiet"
 alias obook="workbook --edit --search"
 alias cdbook="cd $WORKBOOK_DIR"
+function vb () {
+  result=`book $1`
+  vim ${result}
+}
 
 # Git
 alias g="git"
