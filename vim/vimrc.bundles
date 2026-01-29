@@ -27,6 +27,10 @@ Plug 'tweekmonster/wstrip.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-scripts/matchit.zip'
 Plug 'w0rp/ale'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'MeanderingProgrammer/render-markdown.nvim'
+Plug 'sainnhe/everforest'
+
 
 if filereadable(expand("~/.vimrc.bundles.local"))
   source ~/.vimrc.bundles.local
