@@ -38,7 +38,7 @@ set colorcolumn=80
 
 " ========= Color ========
 
-colorscheme vibrantink
+colorscheme everforest
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 " don't highlight trailing whitespace
 let g:wstrip_highlight = 0
@@ -136,6 +136,7 @@ let g:markdown_syntax_conceal = 0
 " ========= Shortcuts ========
 
 " NERDTree
+let NERDTreeShowHidden=1
 map <silent> <LocalLeader>nt :NERDTreeToggle<CR>
 map <silent> <LocalLeader>nr :NERDTree<CR>
 map <silent> <LocalLeader>nf :NERDTreeFind<CR>
