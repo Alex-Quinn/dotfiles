@@ -101,6 +101,7 @@ alias ex="exit"
 alias server="env PORT=3000 bundle exec puma -C config/puma.rb"
 alias reload="source ~/.zshrc && clear"
 alias diff="colordiff"
+alias vim="nvim"
 
 function search () {
   alias | grep $1
@@ -123,16 +124,14 @@ alias start='be foreman start -f Procfile.dev'
 alias book="workbook --quiet"
 alias obook="workbook --edit --search"
 alias cdbook="cd $WORKBOOK_DIR"
-function vb () {
+function vbook () {
   result=`book $1`
   vim ${result}
 }
+alias vb="vbook"
 
 # Git
 alias g="git"
-alias gmm='gmom' # git merge origin/master
-alias gs='gst' # git status
-alias gcoa='git co .'
 
 # Processes
 function pss () {
@@ -151,3 +150,28 @@ function tstart () {
 
 # Source all various non-public zsh config files
 source "${HOME}/.zsh.local"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/opt/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+# bun completions
+[ -s "/Users/alex/.bun/_bun" ] && source "/Users/alex/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
